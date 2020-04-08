@@ -12,8 +12,8 @@ def stableSort(arr, digit, n): #insertion sort
             i=i-1
 
 def radixSort(arr,d):
-    for j in range(d,0,-1):
-        stableSort(arr,j,len(arr))
+    for digit in range(d,0,-1):
+        stableSort(arr,digit,len(arr))
 
         
 
