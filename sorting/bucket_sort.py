@@ -21,6 +21,8 @@ def bucketSort(arr,n):
         result.extend(insertionSort(b,len(b)))
     print(result)
 
+
+
 def insertionSort(arr, n): #insertion sort
     for i in range(1,n): # 1부터 n-1까지
         while i!=0 and arr[i]<arr[i-1] :

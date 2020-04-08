@@ -3,18 +3,19 @@
 Radix 정렬을 파이썬으로 짜서 연습해보자!
 
 """
-arr= [123,456,232,121,878,456,123,666,555,323,879]
+arr= [123,456,232,121,878,456,333,666,555,323,879]
 
-def stableSort(arr, n): #insertion sort
+def stableSort(arr, digit, n): #insertion sort
     for i in range(1,n): # 1부터 n-1까지
-        while i!=0 and arr[i]<arr[i-1] :
+        while i!=0 and str(arr[i])[digit-1]<str(arr[i-1])[digit-1] :
             arr[i],arr[i-1]=arr[i-1],arr[i]
             i=i-1
 
 def radixSort(arr,d):
-    save = arr
-    for j in range(d,-1,-1):
-        temp = [x%10 for x in arr]
+    for j in range(d,0,-1):
+        stableSort(arr,j,len(arr))
+
+        
 
 
 
