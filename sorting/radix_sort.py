@@ -16,9 +16,5 @@ def radixSort(arr,d):
         stableSort(arr,digit,len(arr))
 
         
-
-
-
-
 radixSort(arr,3)
 print(arr)
