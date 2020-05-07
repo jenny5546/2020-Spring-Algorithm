@@ -4,7 +4,7 @@
 """
 
 array = [0,5,31,3,4,2,1]
-
+# 0,1,3,6,9,2
 def sort(arr, n):
 
     for i in range(1,n): # 1부터 N-1까지 
