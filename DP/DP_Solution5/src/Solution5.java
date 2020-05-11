@@ -27,6 +27,7 @@ class Solution5 {
     static int Answer;
 
     public static void main(String[] args) throws Exception {
+
 		/*
 		   동일 폴더 내의 input5.txt 로부터 데이터를 읽어옵니다.
 		   또한 동일 폴더 내의 output5.txt 로 정답을 출력합니다.
@@ -63,7 +64,52 @@ class Solution5 {
 			   문제의 답을 계산하여 그 값을 Answer에 저장하는 것을 가정하였습니다.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
-            Answer = 0;
+
+            int [][] include_tower = new int [n][H + 1]; // [i][j]는 블록 1부터 i까지를 써서 높이 j를 만든 경우의 수 (i 포함)
+            int [][] exclude_tower = new int [n][H + 1]; // [i][j]는 블록 1부터 i까지를 써서 높이 j를 만든 경우의 수 (i 안 포함)
+
+
+            if (h[0]<=H){
+                include_tower[0][h[0]]+=1; // block 1까지 쌓고 1을 포함 할 때, 전체 길이가 h[0]인 경우는 하나가 된다.
+            }
+
+            for (int i=1; i<n; i++){ // 그 다음 block2부터 쌓아가면서,
+                if(h[i]<=H) {
+                    // 해당 i번째 block의 높이가 H보다 작은 경우, 모두 쌓아 줄 수 있기 때문에 경우의 수 +1해주기
+                    // block i만 쌓아줄 때를 계산하면 우선은 경우의 수가 다 1이니까.
+                    include_tower[i][h[i]] += 1;
+                }
+            }
+            for (int i=1; i<n; i++){
+
+                for (int height=0; height<=H; height++){
+
+                    int add_succ = h[i]-d[i-1];
+                    int add_unsucc= h[i];
+
+                    exclude_tower[i][height] = (include_tower[i-1][height]+exclude_tower[i-1][height])% 1000000;
+
+                    if (height-add_succ>=0){
+                        include_tower[i][height] += include_tower[i-1][height-add_succ]% 1000000;
+                    }
+                    if (height-add_unsucc>=0){
+                        include_tower[i][height] += exclude_tower[i-1][height-add_unsucc]% 1000000;
+                    }
+                }
+            }
+
+            Answer=0;
+
+            for (int i=0; i<=H; i++){
+                Answer+= include_tower[n-1][i]+ exclude_tower[n-1][i];
+                Answer%= 1000000;
+            }
+
+
+
+
+
+
 
 
             // output5.txt로 답안을 출력합니다.
@@ -78,6 +124,7 @@ class Solution5 {
 
         br.close();
         pw.close();
+
     }
 }
 

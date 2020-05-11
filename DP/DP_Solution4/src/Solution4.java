@@ -26,6 +26,87 @@ class Solution4 {
     static int[][] A = new int[3][max_n];
     static int Answer;
 
+    static int calcScore(int idx, int pattern){
+        switch(pattern){
+            // 위에부터 (동그라미, 세모, 엑스)
+            case 0:
+                return (A[0][idx] - A[2][idx]);
+
+            // 위에부터 (동그라미, 엑스, 세모)
+            case 1:
+                return (A[0][idx] - A[1][idx]);
+
+            // 위에부터 (세모, 동그라미, 엑스)
+            case 2:
+                return (A[1][idx] - A[2][idx]);
+
+            // 위에부터 (세모, 엑스, 동그라미)
+            case 3:
+                return (A[2][idx] - A[1][idx]);
+
+            // 위에부터 (엑스, 동그라미, 세모)
+            case 4:
+                return (A[1][idx] - A[0][idx]);
+
+            // 위에부터 (엑스, 세모, 동그라미)
+            case 5:
+                return (A[2][idx] - A[0][idx]);
+
+            default:
+                return 0;
+        }
+    }
+
+    static int [] compatiblePatt(int pattern){
+        switch(pattern){
+            // 위에부터 (동그라미, 세모, 엑스)
+
+            case 0:
+                int [] result1 = new int[2];
+                result1[0] = 3;
+                result1[1]= 4;
+                return result1;
+
+            // 위에부터 (동그라미, 엑스, 세모)
+            case 1:
+                int [] result2 = new int[2];
+                result2[0] = 2;
+                result2[1]= 5;
+                return result2;
+
+            // 위에부터 (세모, 동그라미, 엑스)
+            case 2:
+                int [] result3 = new int[2];
+                result3[0] = 1;
+                result3[1]= 5;
+                return result3;
+
+            // 위에부터 (세모, 엑스, 동그라미)
+            case 3:
+                int [] result4 = new int[2];
+                result4[0] = 0;
+                result4[1]= 4;
+                return result4;
+
+            // 위에부터 (엑스, 동그라미, 세모)
+            case 4:
+                int [] result5 = new int[2];
+                result5[0] = 0;
+                result5[1]= 3;
+                return result5;
+
+            // 위에부터 (엑스, 세모, 동그라미)
+            case 5:
+                int [] result6 = new int[2];
+                result6[0] = 1;
+                result6[1]= 2;
+                return result6;
+
+            default:
+                return null;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
 		/*
 		   동일 폴더 내의 input4.txt 로부터 데이터를 읽어옵니다.
@@ -34,6 +115,9 @@ class Solution4 {
         BufferedReader br = new BufferedReader(new FileReader("input4.txt"));
         StringTokenizer stk;
         PrintWriter pw = new PrintWriter("output4.txt");
+
+        // Score[i][p]: i열이 패턴 p로 놓을 때, i 열 까지의 최대 점수 합.
+        int [][] Score = new int[max_n][6];
 
 		/*
 		   10개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
@@ -55,14 +139,30 @@ class Solution4 {
                 }
             }
 
-
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   이 부분에서 여러분의 알고리즘이 수행됩니다.
 			   문제의 답을 계산하여 그 값을 Answer에 저장하는 것을 가정하였습니다.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
-            Answer = 0;
+
+            for (int pattern=0; pattern<6; pattern++){
+                Score[0][pattern] = calcScore(0,pattern);
+            }
+            for (int idx=1; idx<=n-1; idx++){
+                for (int pattern=0; pattern<6; pattern++){
+                    int [] compatible= compatiblePatt(pattern);
+                    Score[idx][pattern] = Math.max(Score[idx-1][compatible[0]], Score[idx-1][compatible[1]])+calcScore(idx,pattern);
+                }
+            }
+            // 마지막 pattern 에서 최대 점수를 반환.
+            Answer = Score[n-1][0];
+
+            for (int pattern=0; pattern<6; pattern++){
+                if (Score[n-1][pattern]>Answer){
+                    Answer = Score[n-1][pattern];
+                }
+            }
 
 
             // output4.txt로 답안을 출력합니다.

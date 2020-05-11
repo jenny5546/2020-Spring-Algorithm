@@ -48,13 +48,72 @@ class Solution3 {
             n = Integer.parseInt(stk.nextToken());
             s = br.readLine();
 
+            int [][] resL = new int[n+1][n+1]; // resL[i][j] s의 i~j까지의 index에서 가장 긴 palindrome
+
+            for (int i=0; i<n; ++i){
+                resL[i+1][i+1]= 1;
+            }
+
+            for (int len=2; len<=n+1; len++){
+                for (int j=1; j<=n-len+1; j++){
+                    int k= len+j-1;
+                    if (len==2 && s.charAt(j-1)==s.charAt(k-1)){
+                            resL[j][k] = 2;
+                    }
+                    else if (s.charAt(j-1) != s.charAt(k-1)){
+                        resL[j][k] = Math.max(resL[j+1][k],resL[j][k-1]);
+
+                    }
+//                      (s.charAt(j-1) ==s.charAt(k-1))
+                    else{
+                        resL[j][k] = resL[j+1][k-1]+2;
+                    }
+
+                }
+            }
+
+//            for (int i=1; i<=n-1; ++i){
+//                for (int j=1; j<=n-i; ++j){
+//                    int k = i+j;
+//                    for (int l=j; l<=k-1; ++l){
+//                        if (k-j==1 && s.charAt(j-1)==s.charAt(k-1)){
+//                            resL[j][k] = 2;
+//                        }
+//                        else if (s.charAt(j-1) == s.charAt(k-1)){
+//                            resL[j][k] = resL[j+1][k-1]+2;
+//                        }
+////                      (s.charAt(j-1) !=s.charAt(k-1))
+//                        else{
+//                            resL[j][k] = Math.max(resL[j+1][k],resL[j][k-1]);
+//                        }
+//
+//
+//                    }
+//                }
+//            }
+
+
+
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   이 부분에서 여러분의 알고리즘이 수행됩니다.
 			   문제의 답을 계산하여 그 값을 Answer에 저장하는 것을 가정하였습니다.
+
+			   1. resL[i][i] 이면 = 1
+			   2. string 두 글자,
+			        - 둘이 같다
+			            L[i][j] = 2
+			   3. 첫, 끝 둘이 다르다
+			        L[i][j] = max(L[i+1,j], L[i][j-1])
+			   4. 첫 끝이 같다
+			        L[i][j]= L[i+1][j-1] +2
+
+
 			 */
+
+
             /////////////////////////////////////////////////////////////////////////////////////////////
-            Answer = 0;
+            Answer = resL[1][n];
 
 
             // output4.txt로 답안을 출력합니다.
